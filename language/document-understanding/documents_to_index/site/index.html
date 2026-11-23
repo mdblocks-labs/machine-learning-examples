@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Search a folder of documents</title>
+  <link rel="stylesheet" href="mdb.css" />
+  <script src="mdb.js"></script>
+  <style>
+    /* Layout only; every colour is a token from `mdb.css`. */
+    .question { font-size: 20px; margin: 0 0 4px; }
+    .hits { display: grid; gap: 10px; margin: 0; padding: 0; }
+    .hit { list-style: none; }
+    .hit .where { display: flex; gap: 8px; align-items: baseline; flex-wrap: wrap; }
+    .hit .score { font-variant-numeric: tabular-nums; color: var(--mdb-text-muted); margin-left: auto; }
+    .hit p { margin: 6px 0 0; }
+  </style>
+</head>
+<body>
+<main class="mdb-site">
+  <h1>Search a folder of documents</h1>
+  <p class="mdb-prov" id="page"></p>
+
+  <h2>The question</h2>
+  <p class="question" id="question"></p>
+
+  <h2>The five closest chunks</h2>
+  <p class="mdb-prov" data-prov="query.results"></p>
+  <ol class="hits" id="hits"></ol>
+
+  <h2>What was read</h2>
+  <p class="mdb-prov" data-prov="chunk.chunks"></p>
+  <div id="files"></div>
+</main>
+<script type="module">
+  /// <reference path="mdb.d.ts" />
+  const at = (id) => document.getElementById(id);
+  const el = (tag, props) => Object.assign(document.createElement(tag), props);
+
+  const absent = (node, endpoint, err) => {
+    node.className = "mdb-absent";
+    node.textContent = err.absent
+      ? `${endpoint}: no value — ${err.absent}${err.reason ? ` (${err.reason})` : ""}`
+      : `${endpoint}: ${err.message}`;
+  };
+
+  async function drawQuestion(withheld) {
+    if (withheld) {
+      // The entry holds the declared default, which the run may not have used.
+      absent(at("question"), "@in.question", { absent: "withheld", reason: "--no-values" });
+      return;
+    }
+    try {
+      at("question").textContent = await mdb.value("@in.question");
+    } catch (err) {
+      absent(at("question"), "@in.question", err);
+    }
+  }
+
+  async function drawHits() {
+    try {
+      const { columns, rows } = await mdb.table("query.results");
+      const col = (name) => columns.indexOf(name);
+      at("hits").replaceChildren(...rows.map((row) => {
+        const where = el("div", { className: "where" });
+        where.append(
+          el("b", { textContent: row[col("file")] }),
+          el("span", { className: "mdb-muted", textContent: row[col("heading")] ?? "" }),
+          el("span", { className: "score", textContent: `score ${Number(row[col("score")]).toFixed(3)}` }),
+        );
+        const item = el("li", { className: "hit mdb-card" });
+        item.append(where, el("p", { textContent: row[col("text")] }));
+        return item;
+      }));
+      if (rows.length === 0) at("hits").replaceChildren(el("li", { className: "mdb-absent", textContent: "No chunks matched." }));
+    } catch (err) {
+      absent(at("hits"), "query.results", err);
+    }
+  }
+
+  // One row per file: its chunk count, or the problems `chunk` reported.
+  async function drawFiles() {
+    // Each read on its own, so one missing value doesn't hide the other.
+    const [chunks, report] = await Promise.all(["chunk.chunks", "chunk.report"].map((endpoint) =>
+      mdb.value(endpoint).catch((err) => { const note = el("p"); absent(note, endpoint, err); return note; })));
+    const notes = [chunks, report].filter((v) => v instanceof Element);
+    const files = new Map();
+    const file = (name) => files.get(name) ?? files.set(name, { chunks: null, problems: [] }).get(name);
+    if (Array.isArray(chunks)) {
+      for (const rows of chunks) for (const row of rows) file(row.file).chunks = (file(row.file).chunks ?? 0) + 1;
+    }
+    if (Array.isArray(report)) for (const { file: name, problem } of report) file(name).problems.push(problem);
+    const table = el("div");
+    if (files.size > 0) {
+      mdb.render(table, {
+        columns: ["file", "chunks", "problems"],
+        rows: [...files].sort(([a], [b]) => a.localeCompare(b))
+          .map(([name, f]) => [name, f.chunks ?? (Array.isArray(chunks) ? 0 : null), f.problems.join("; ")]),
+      }, { renderer: "table" });
+    }
+    at("files").replaceChildren(...notes, table);
+  }
+
+  async function draw() {
+    const { manifest } = mdb;
+    // A `--no-values` copy carries no runs, so "never run" would be wrong there.
+    const withheld = mdb.entry("query.results").reason === "--no-values";
+    at("page").textContent = withheld ? "No recorded values in this copy" : [
+      `${manifest.runs.length} run${manifest.runs.length === 1 ? "" : "s"}`,
+      manifest.asOf ? `as of ${manifest.asOf}` : "never run",
+    ].join(" · ");
+    await Promise.all([mdb.bind(), drawQuestion(withheld), drawHits(), drawFiles()]);
+  }
+
+  // A finished run reloads the page, so every draw starts from a fresh page.
+  try {
+    await mdb.ready();
+    mdb.on("change", () => location.reload());
+    await mdb.ready(); // again, now subscribed, so a run that finished meanwhile is drawn
+  } catch (err) {
+    at("page").textContent = `Can't read the runs: ${err.message}. Reload to try again.`;
+    throw err;
+  }
+  await draw();
+</script>
+</body>
+</html>

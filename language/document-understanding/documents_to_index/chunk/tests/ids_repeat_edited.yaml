@@ -1,0 +1,27 @@
+# Ids: `a.md` from the `ids` case with only the first repeat, under `One`, edited; the untouched one under `Two` keeps its id.
+mdblocks: 1
+given:
+  text:
+  - - file: a.md
+      problems: []
+      markdown: |-
+        # One
+
+        Repeated line, edited.
+
+        # Two
+
+        Repeated line.
+expect:
+  chunks:
+  - - chunk_id: fc4c89ab0f87f79a
+      file: a.md
+      position: 0
+      heading: One
+      text: Repeated line, edited.
+    - chunk_id: 68fd9f1bf850f9e2
+      file: a.md
+      position: 1
+      heading: Two
+      text: Repeated line.
+  report: []

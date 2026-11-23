@@ -1,0 +1,25 @@
+# Ids: a chunk whose text ends in a NUL and a digit does not take the id of a repeat of the text before it.
+mdblocks: 1
+given:
+  text:
+  - - file: n.md
+      problems: []
+      markdown: "# A\n\nsame\n\n# B\n\nsame\n\n# C\n\nsame\02"
+expect:
+  chunks:
+  - - chunk_id: ab74a7c06eb67dd2
+      file: n.md
+      position: 0
+      heading: A
+      text: same
+    - chunk_id: 77762217fff1ffeb
+      file: n.md
+      position: 1
+      heading: B
+      text: same
+    - chunk_id: 385caf9876683b5f
+      file: n.md
+      position: 2
+      heading: C
+      text: "same\02"
+  report: []

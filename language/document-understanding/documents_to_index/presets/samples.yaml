@@ -1,0 +1,5 @@
+# The bundled sample documents and question; `folder` is read from the workflow folder.
+params:
+  folder: samples/documents
+  question: How many vacation days do employees get?
+runner: local

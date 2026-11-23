@@ -1,0 +1,56 @@
+# Sections: text before the first heading has none; a chunk keeps its nearest heading; short paragraphs share a chunk; a `#` line in a code fence is not a heading, and a blank line inside the fence does not split it or lose its indentation.
+mdblocks: 1
+given:
+  text:
+  - - file: guide.md
+      problems: []
+      markdown: |
+        Intro line before any heading.
+
+        # Setup
+
+        Install the tool.
+
+        Then sign in.
+
+        ## Printing
+
+        Run the script:
+
+        ```sh
+        # adds the printer
+        ./setup.sh
+
+            --office berlin
+        ```
+
+        ### Empty section
+expect:
+  chunks:
+  - - chunk_id: 7e37f005678e7cb7
+      file: guide.md
+      position: 0
+      heading: null
+      text: Intro line before any heading.
+    - chunk_id: fdd597339af8c5c8
+      file: guide.md
+      position: 1
+      heading: Setup
+      text: |-
+        Install the tool.
+
+        Then sign in.
+    - chunk_id: 63d1a453d61f1258
+      file: guide.md
+      position: 2
+      heading: Printing
+      text: |-
+        Run the script:
+
+        ```sh
+        # adds the printer
+        ./setup.sh
+
+            --office berlin
+        ```
+  report: []

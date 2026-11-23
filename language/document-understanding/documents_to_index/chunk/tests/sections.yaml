@@ -1,0 +1,47 @@
+# Sections from a page, a Word file or a PDF are packed as given: a heading ending in `#`, a table row holding a pipe and a paragraph starting with `#` are text, never parsed.
+mdblocks: 1
+given:
+  text:
+  - - file: page.html
+      problems: []
+      sections:
+      - heading: null
+        paragraphs:
+        - Lumen support pages
+      - heading: 'Ticket #'
+        paragraphs:
+        - '# support is our chat channel.'
+        - Command | Purpose
+        - sort | uniq | Deduplicate
+      - heading: Code
+        paragraphs:
+        - |-
+          def add(a, b):
+
+              return a + b
+expect:
+  chunks:
+  - - chunk_id: 7c01345e19f8a503
+      file: page.html
+      position: 0
+      heading: null
+      text: Lumen support pages
+    - chunk_id: 25c3250cb769cede
+      file: page.html
+      position: 1
+      heading: 'Ticket #'
+      text: |-
+        # support is our chat channel.
+
+        Command | Purpose
+
+        sort | uniq | Deduplicate
+    - chunk_id: eb3a6752d35efcb9
+      file: page.html
+      position: 2
+      heading: Code
+      text: |-
+        def add(a, b):
+
+            return a + b
+  report: []

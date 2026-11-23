@@ -1,0 +1,50 @@
+# Report: a file that can't be read, a page with no text layer and files with no text are listed, and only files with chunks are in `chunks`.
+mdblocks: 1
+given:
+  text:
+  - - file: locked.pdf
+      problems:
+      - 'can''t be read: PdfiumError: Failed to load document (PDFium: Incorrect password error).'
+      sections: []
+  - - file: mixed.pdf
+      problems:
+      - page 2 has no text layer
+      sections:
+      - heading: Page 1
+        paragraphs:
+        - Some text.
+  - - file: scan.pdf
+      problems:
+      - page 1 has no text layer
+      sections: []
+  - - file: empty.txt
+      problems: []
+      sections:
+      - heading: null
+        paragraphs:
+        - "   \n"
+  - - file: outline.html
+      problems: []
+      sections:
+      - heading: Departments
+        paragraphs: []
+expect:
+  chunks:
+  - - chunk_id: 584673ca02a066c7
+      file: mixed.pdf
+      position: 0
+      heading: Page 1
+      text: Some text.
+  report:
+  - file: locked.pdf
+    problem: 'can''t be read: PdfiumError: Failed to load document (PDFium: Incorrect password error).'
+  - file: mixed.pdf
+    problem: page 2 has no text layer
+  - file: scan.pdf
+    problem: page 1 has no text layer
+  - file: scan.pdf
+    problem: no text
+  - file: empty.txt
+    problem: no text
+  - file: outline.html
+    problem: no text

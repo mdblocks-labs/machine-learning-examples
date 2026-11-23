@@ -1,0 +1,50 @@
+# Headings: a bare `##`, or `## ###`, is an empty heading that ends the section before it; `#tag` with no space is text.
+mdblocks: 1
+given:
+  text:
+  - - file: e.md
+      problems: []
+      markdown: |-
+        # Intro
+
+        First part.
+
+        ##
+
+        Second part.
+
+        ## ###
+
+        After an all-hash heading.
+
+        #tag is not a heading.
+
+        ## Closed ##
+
+        Third part.
+expect:
+  chunks:
+  - - chunk_id: 6e4e1195c6b245d2
+      file: e.md
+      position: 0
+      heading: Intro
+      text: First part.
+    - chunk_id: ff8265ae8026f0e7
+      file: e.md
+      position: 1
+      heading: null
+      text: Second part.
+    - chunk_id: 1e0412cf72a9cc9a
+      file: e.md
+      position: 2
+      heading: null
+      text: |-
+        After an all-hash heading.
+
+        #tag is not a heading.
+    - chunk_id: b867fa1b6f453b48
+      file: e.md
+      position: 3
+      heading: Closed
+      text: Third part.
+  report: []

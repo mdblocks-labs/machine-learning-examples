@@ -1,0 +1,36 @@
+# Ids: `a.md` from the `ids` case with a section added first and the second section edited; `Repeated line.` under `One` keeps its id, and the positions shift.
+mdblocks: 1
+given:
+  text:
+  - - file: a.md
+      problems: []
+      markdown: |-
+        # Zero
+
+        A new first section.
+
+        # One
+
+        Repeated line.
+
+        # Two
+
+        Repeated line, edited.
+expect:
+  chunks:
+  - - chunk_id: 1edbfa16fa280720
+      file: a.md
+      position: 0
+      heading: Zero
+      text: A new first section.
+    - chunk_id: 6043fc4c8c57dbfc
+      file: a.md
+      position: 1
+      heading: One
+      text: Repeated line.
+    - chunk_id: c313e121b4fed89f
+      file: a.md
+      position: 2
+      heading: Two
+      text: Repeated line, edited.
+  report: []

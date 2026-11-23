@@ -1,0 +1,35 @@
+# Ids: the same text twice in one file gets two ids; the same text in another file gets another id.
+mdblocks: 1
+given:
+  text:
+  - - file: a.md
+      problems: []
+      markdown: |-
+        # One
+
+        Repeated line.
+
+        # Two
+
+        Repeated line.
+  - - file: b.md
+      problems: []
+      markdown: Repeated line.
+expect:
+  chunks:
+  - - chunk_id: 6043fc4c8c57dbfc
+      file: a.md
+      position: 0
+      heading: One
+      text: Repeated line.
+    - chunk_id: 68fd9f1bf850f9e2
+      file: a.md
+      position: 1
+      heading: Two
+      text: Repeated line.
+  - - chunk_id: 3388cb865203a7d7
+      file: b.md
+      position: 0
+      heading: null
+      text: Repeated line.
+  report: []
