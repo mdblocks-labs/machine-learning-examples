@@ -8,7 +8,7 @@ The company and everything it says are invented. The two Word files and the
 encrypted PDF aren't committed, since the Hub refuses binary files; run this
 before the samples preset, from the repository root:
 
-    uv run language/document-understanding/documents_to_index/samples/generate.py
+    uv run text/document-search/samples/generate.py
 
 The output is the same on every run.
 

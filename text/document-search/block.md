@@ -16,10 +16,10 @@ ports:
     index: Table
     report: Json
     results: Table
-field: Machine learning / Language / Document understanding
+field: Machine learning / Text / Search
 ---
 
-# documents_to_index
+# document-search
 
 **Turn a folder of PDFs, Word files and web pages into an index an LLM can
 search.** Each file's text is split into sections under its headings, the
@@ -61,8 +61,8 @@ query.results  -> @out.results
 ## Try it
 
 ```sh
-uv run language/document-understanding/documents_to_index/samples/generate.py
-mdb run language/document-understanding/documents_to_index --preset language/document-understanding/documents_to_index/presets/samples.yaml
+uv run text/document-search/samples/generate.py
+mdb run text/document-search --preset text/document-search/presets/samples.yaml
 ```
 
 The first run downloads the model, about 90 MB, once. The [samples](samples/)
@@ -76,5 +76,5 @@ mdb runs show latest --block per_file --port index --side out --rows --out index
 ```
 
 To see the results, open the folder in `mdb ui` and pick the Site tab, or
-build a static copy with `mdb site build language/document-understanding/documents_to_index -o out`. The
+build a static copy with `mdb site build text/document-search -o out`. The
 page shows the question, the closest chunks and what each file gave.
