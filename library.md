@@ -1,12 +1,12 @@
 ---
 mdblocks: 1
-name: Example mdBlocks workflows for machine learning
+name: Machine learning examples
 description: A search index over a folder of documents, built and queried on your own machine.
 license: MIT
 field: Machine learning / Text / Search
 ---
 
-# Example mdBlocks workflows for machine learning
+# Machine learning examples
 
 Each example is one workflow you can run, read and copy, in its domain's folder.
 
