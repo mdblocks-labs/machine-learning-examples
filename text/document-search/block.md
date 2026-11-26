@@ -14,6 +14,8 @@ params:
     dtype: string
     default: "How many vacation days do employees get?"
 card:
+  usage:
+    - workflow
   field: Machine learning / Text / Search
 ---
 
