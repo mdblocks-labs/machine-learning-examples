@@ -1,22 +1,20 @@
 ---
 mdblocks: 1
-type: mdblocks/block
 kind: composite
 ports:
-  in:
-    folder:
-      type: Param
-      dtype: string
-      default: "samples/documents"
-    question:
-      type: Param
-      dtype: string
-      default: "How many vacation days do employees get?"
   out:
     index: Table
     report: Json
     results: Table
-field: Machine learning / Text / Search
+params:
+  folder:
+    dtype: string
+    default: "samples/documents"
+  question:
+    dtype: string
+    default: "How many vacation days do employees get?"
+card:
+  field: Machine learning / Text / Search
 ---
 
 # document-search
@@ -42,20 +40,18 @@ import per_document
 import per_file
 import query
 
-@in.folder        -> collect.folder
 collect.documents -> per_document.documents
 
 per_document.text -> chunk.text
-chunk.chunks      -> per_file.chunks
-model.model       -> per_file.model
+chunk.chunks -> per_file.chunks
+model.model -> per_file.model
 
 per_file.index -> query.index
-model.model    -> query.model
-@in.question   -> query.question
+model.model -> query.model
 
 per_file.index -> @out.index
-chunk.report   -> @out.report
-query.results  -> @out.results
+chunk.report -> @out.report
+query.results -> @out.results
 ```
 
 ## Try it
@@ -72,7 +68,7 @@ To use your own, set the `folder` param to your folder and `question` to what
 you want to find (under `params:` in a preset). To save the index as Parquet:
 
 ```sh
-mdb runs show latest --block per_file --port index --side out --rows --out index.parquet
+mdb runs show latest --workflow text/document-search --block per_file --port index --side out --rows --out index.parquet
 ```
 
 To see the results, open the folder in `mdb ui` and pick the Site tab, or

@@ -1,17 +1,16 @@
 ---
 mdblocks: 1
-type: mdblocks/block
 kind: leaf
 execution: transform
 ports:
   in:
     index: Table
     model: Files
-    question:
-      type: Param
-      dtype: string
   out:
     results: Table
+params:
+  question:
+    dtype: string
 env:
   requires_python: ">=3.11"
   python:

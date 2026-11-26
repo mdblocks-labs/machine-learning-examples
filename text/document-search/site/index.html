@@ -47,13 +47,13 @@
   async function drawQuestion(withheld) {
     if (withheld) {
       // The entry holds the declared default, which the run may not have used.
-      absent(at("question"), "@in.question", { absent: "withheld", reason: "--no-values" });
+      absent(at("question"), "@param.question", { absent: "withheld", reason: "--no-values" });
       return;
     }
     try {
-      at("question").textContent = await mdb.value("@in.question");
+      at("question").textContent = await mdb.value("@param.question");
     } catch (err) {
-      absent(at("question"), "@in.question", err);
+      absent(at("question"), "@param.question", err);
     }
   }
 

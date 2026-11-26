@@ -1,9 +1,8 @@
 ---
 mdblocks: 1
-type: mdblocks/site
 title: Search a folder of documents
 reads:
-  - "@in.question"
+  - "@param.question"
   - query.results
   - chunk.chunks
   - chunk.report

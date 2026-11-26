@@ -1,15 +1,13 @@
 ---
 mdblocks: 1
-type: mdblocks/block
 kind: leaf
 execution: io
 ports:
-  in:
-    folder:
-      type: Param
-      dtype: string
   out:
     documents: Files
+params:
+  folder:
+    dtype: string
 code:
   lang: python
   entry: collect.py

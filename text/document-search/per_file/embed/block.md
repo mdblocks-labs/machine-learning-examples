@@ -1,6 +1,5 @@
 ---
 mdblocks: 1
-type: mdblocks/block
 kind: leaf
 execution: transform
 ports:

@@ -1,6 +1,5 @@
 ---
 mdblocks: 1
-type: mdblocks/block
 kind: map
 ports:
   in:

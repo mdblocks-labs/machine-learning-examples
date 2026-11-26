@@ -1,6 +1,5 @@
 ---
 mdblocks: 1
-type: mdblocks/library
 name: Example mdBlocks workflows for machine learning
 description: A search index over a folder of documents, built and queried on your own machine.
 license: MIT
